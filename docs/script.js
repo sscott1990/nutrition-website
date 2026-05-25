@@ -15,25 +15,25 @@ document.addEventListener("DOMContentLoaded", () => {
     "Today": {
       summary: ["1,842", "96g", "188g", "61g", "78%", "64%", "4", "0"],
       alerts: [
-        { text: "Mia is below calcium target this week.", type: "warning" },
-        { text: "Sarah logged a high glucose reading.", type: "danger" },
-        { text: "James is under protein goal today.", type: "warning" },
-        { text: "2 family members are below vitamin D target.", type: "info" }
+        { text: "Household calcium intake is below target for some family members.", type: "warning" },
+        { text: "One or more glucose-related readings may need review this week.", type: "danger" },
+        { text: "Protein intake is below target for at least one family member today.", type: "warning" },
+        { text: "Vitamin D intake is below target for some family members.", type: "info" }
       ]
     },
     "Last 7 Days": {
       summary: ["1,915", "102g", "194g", "63g", "82%", "69%", "3", "0"],
       alerts: [
-        { text: "Vitamin D is low for 2 family members this week.", type: "warning" },
-        { text: "Sarah had 3 glucose readings above target.", type: "danger" },
+        { text: "Vitamin D intake has been low for some family members this week.", type: "warning" },
+        { text: "Some glucose readings were above target in the last 7 days.", type: "danger" },
         { text: "Household protein intake improved this week.", type: "info" }
       ]
     },
     "Last 30 Days": {
       summary: ["1,888", "99g", "190g", "62g", "80%", "67%", "5", "0"],
       alerts: [
-        { text: "Calcium average remains below target for Mia.", type: "danger" },
-        { text: "Sarah's glucose trend shows occasional spikes after dinner.", type: "warning" },
+        { text: "Calcium intake trends remain below target for part of the household.", type: "danger" },
+        { text: "Glucose trends show occasional spikes after some meals.", type: "warning" },
         { text: "Overall meal logging consistency is strong this month.", type: "info" }
       ]
     }
@@ -119,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const grocery = groceryMap[item.groceryId];
 
       if (!grocery || !grocery.nutrition) {
+        ingredientLines.push(`Missing grocery data for "${item.groceryId}" × ${item.quantity}`);
         return;
       }
 
@@ -161,63 +162,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
     members.forEach((member) => {
       const bmi = calculateBMI(member.weightLb, member.heightIn);
-      const conditionsText = Array.isArray(member.conditions) && member.conditions.length
-        ? member.conditions.join(", ")
-        : "None listed";
-      const goalsText = Array.isArray(member.healthGoals) && member.healthGoals.length
-        ? member.healthGoals.join(", ")
-        : "No goals listed";
+      const conditionsText =
+        Array.isArray(member.conditions) && member.conditions.length
+          ? member.conditions.join(", ")
+          : "None listed";
+      const goalsText =
+        Array.isArray(member.healthGoals) && member.healthGoals.length
+          ? member.healthGoals.join(", ")
+          : "No goals listed";
 
       const card = document.createElement("article");
       card.className = "member-card";
 
       card.innerHTML = `
-        <div class="member-header">
-          <div>
-            <h3>${member.name}</h3>
-            <p>${member.age} years old · ${member.sex}</p>
-          </div>
-          <span>Click to expand</span>
-        </div>
+        <h3>${member.name}</h3>
+        <p><strong>Age:</strong> ${member.age ?? "N/A"} years old</p>
+        <p><strong>Sex:</strong> ${member.sex ?? "N/A"}</p>
+        <p><strong>Weight:</strong> ${member.weightLb ?? "N/A"} lbs</p>
+        <p><strong>Height:</strong> ${member.heightIn ?? "N/A"} in</p>
+        <p><strong>BMI:</strong> ${bmi ?? "N/A"}</p>
+        <p><strong>Goals:</strong> ${goalsText}</p>
+        <p><strong>Conditions:</strong> ${conditionsText}</p>
+        <p><strong>Notes:</strong> ${member.notes || "No notes provided."}</p>
 
-        <div class="member-content">
-          <div class="member-stats">
-            <div><strong>Weight:</strong> ${member.weightLb ?? "N/A"} lbs</div>
-            <div><strong>Height:</strong> ${member.heightIn ?? "N/A"} in</div>
-            <div><strong>BMI:</strong> ${bmi ?? "N/A"}</div>
-          </div>
-
-          <p><strong>Goals:</strong> ${goalsText}</p>
-          <p><strong>Conditions:</strong> ${conditionsText}</p>
-          <p><strong>Notes:</strong> ${member.notes || "No notes provided."}</p>
-
-          <div class="nutrition-grid">
-            <div class="nutrition-pill"><span>Calories</span><strong>${member.nutritionFocus?.calories ?? "N/A"}</strong></div>
-            <div class="nutrition-pill"><span>Protein</span><strong>${member.nutritionFocus?.protein ?? "N/A"}g</strong></div>
-            <div class="nutrition-pill"><span>Carbs</span><strong>${member.nutritionFocus?.carbs ?? "N/A"}g</strong></div>
-            <div class="nutrition-pill"><span>Fat</span><strong>${member.nutritionFocus?.fat ?? "N/A"}g</strong></div>
-            <div class="nutrition-pill"><span>Calcium</span><strong>${member.nutritionFocus?.calcium ?? "N/A"}mg</strong></div>
-            <div class="nutrition-pill"><span>Vitamin D</span><strong>${member.nutritionFocus?.vitaminD ?? "N/A"}mcg</strong></div>
-            <div class="nutrition-pill"><span>Fiber</span><strong>${member.nutritionFocus?.fiber ?? "N/A"}g</strong></div>
-            <div class="nutrition-pill"><span>Sugar</span><strong>${member.nutritionFocus?.sugar ?? "N/A"}g</strong></div>
-          </div>
+        <div class="nutrition-grid">
+          <div class="nutrition-pill"><span>Calories</span><strong>${member.nutritionFocus?.calories ?? "N/A"}</strong></div>
+          <div class="nutrition-pill"><span>Protein</span><strong>${member.nutritionFocus?.protein ?? "N/A"}g</strong></div>
+          <div class="nutrition-pill"><span>Carbs</span><strong>${member.nutritionFocus?.carbs ?? "N/A"}g</strong></div>
+          <div class="nutrition-pill"><span>Fat</span><strong>${member.nutritionFocus?.fat ?? "N/A"}g</strong></div>
+          <div class="nutrition-pill"><span>Calcium</span><strong>${member.nutritionFocus?.calcium ?? "N/A"}mg</strong></div>
+          <div class="nutrition-pill"><span>Vitamin D</span><strong>${member.nutritionFocus?.vitaminD ?? "N/A"}mcg</strong></div>
+          <div class="nutrition-pill"><span>Fiber</span><strong>${member.nutritionFocus?.fiber ?? "N/A"}g</strong></div>
+          <div class="nutrition-pill"><span>Sugar</span><strong>${member.nutritionFocus?.sugar ?? "N/A"}g</strong></div>
         </div>
       `;
 
       familyMembersContainer.appendChild(card);
-    });
-
-    const memberCards = familyMembersContainer.querySelectorAll(".member-card");
-
-    memberCards.forEach((card) => {
-      const header = card.querySelector(".member-header");
-      const content = card.querySelector(".member-content");
-
-      if (header && content) {
-        header.addEventListener("click", () => {
-          content.classList.toggle("collapsed");
-        });
-      }
     });
   }
 
@@ -225,8 +205,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!weeklyMealsContainer) return;
 
     const groceryMap = {};
-    groceries.forEach((grocery) => {
-      groceryMap[grocery.id] = grocery;
+    (groceries || []).forEach((grocery) => {
+      if (grocery && grocery.id) {
+        groceryMap[grocery.id] = grocery;
+      }
     });
 
     weeklyMealsContainer.innerHTML = "";
@@ -337,8 +319,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const meals = await mealsResponse.json();
       const familyMembers = await familyResponse.json();
 
-      renderWeeklyMeals(groceries && meals ? meals : [], groceries || []);
-      renderFamilyMembers(familyMembers || []);
+      renderWeeklyMeals(Array.isArray(meals) ? meals : [], Array.isArray(groceries) ? groceries : []);
+      renderFamilyMembers(Array.isArray(familyMembers) ? familyMembers : []);
 
       const currentRange = dateSelect ? dateSelect.value : "Today";
       updateDashboard(currentRange);
