@@ -2,13 +2,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const dateSelect = document.getElementById("dateRange");
   const summaryValues = document.querySelectorAll(".summary-card strong");
   const alertsContainer = document.querySelector(".alerts");
-  const memberCards = document.querySelectorAll(".member-card");
   const actionButtons = document.querySelectorAll("button");
   const weeklyMealsContainer = document.getElementById("weeklyMeals");
   const mealsLoggedCount = document.getElementById("mealsLoggedCount");
+  const familyMembersContainer = document.getElementById("familyMembers");
 
   const GROCERY_LIBRARY_URL = "https://nutrition-website-database.s3.us-east-1.amazonaws.com/grocery-library.json";
   const WEEKLY_MEALS_URL = "https://nutrition-website-database.s3.us-east-1.amazonaws.com/weekly-meals.json";
+  const FAMILY_MEMBERS_URL = "https://nutrition-website-database.s3.us-east-1.amazonaws.com/family-members.json";
 
   const dashboardData = {
     "Today": {
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateActiveAlertsCount() {
     const countCard = document.querySelector(".summary-card.alert strong");
-    const visibleAlerts = alertsContainer.querySelectorAll(".alert-item").length;
+    const visibleAlerts = alertsContainer ? alertsContainer.querySelectorAll(".alert-item").length : 0;
 
     if (countCard) {
       countCard.textContent = visibleAlerts;
@@ -48,6 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderAlerts(alerts) {
+    if (!alertsContainer) return;
+
     alertsContainer.innerHTML = "";
 
     alerts.forEach((alertItem) => {
@@ -89,6 +92,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.round(value * 10) / 10;
   }
 
+  function calculateBMI(weightLb, heightIn) {
+    if (!weightLb || !heightIn) return null;
+    return roundValue((weightLb / (heightIn * heightIn)) * 703);
+  }
+
   function calculateMealNutrition(meal, groceryMap) {
     const totals = {
       calories: 0,
@@ -102,6 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const ingredientLines = [];
+
+    if (!Array.isArray(meal.ingredients)) {
+      return { totals, ingredientLines };
+    }
 
     meal.ingredients.forEach((item) => {
       const grocery = groceryMap[item.groceryId];
@@ -135,6 +147,78 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       ingredientLines
     };
+  }
+
+  function renderFamilyMembers(members) {
+    if (!familyMembersContainer) return;
+
+    familyMembersContainer.innerHTML = "";
+
+    if (!Array.isArray(members) || members.length === 0) {
+      familyMembersContainer.innerHTML = `<p class="loading-note">No family members found.</p>`;
+      return;
+    }
+
+    members.forEach((member) => {
+      const bmi = calculateBMI(member.weightLb, member.heightIn);
+      const conditionsText = Array.isArray(member.conditions) && member.conditions.length
+        ? member.conditions.join(", ")
+        : "None listed";
+      const goalsText = Array.isArray(member.healthGoals) && member.healthGoals.length
+        ? member.healthGoals.join(", ")
+        : "No goals listed";
+
+      const card = document.createElement("article");
+      card.className = "member-card";
+
+      card.innerHTML = `
+        <div class="member-header">
+          <div>
+            <h3>${member.name}</h3>
+            <p>${member.age} years old · ${member.sex}</p>
+          </div>
+          <span>Click to expand</span>
+        </div>
+
+        <div class="member-content">
+          <div class="member-stats">
+            <div><strong>Weight:</strong> ${member.weightLb ?? "N/A"} lbs</div>
+            <div><strong>Height:</strong> ${member.heightIn ?? "N/A"} in</div>
+            <div><strong>BMI:</strong> ${bmi ?? "N/A"}</div>
+          </div>
+
+          <p><strong>Goals:</strong> ${goalsText}</p>
+          <p><strong>Conditions:</strong> ${conditionsText}</p>
+          <p><strong>Notes:</strong> ${member.notes || "No notes provided."}</p>
+
+          <div class="nutrition-grid">
+            <div class="nutrition-pill"><span>Calories</span><strong>${member.nutritionFocus?.calories ?? "N/A"}</strong></div>
+            <div class="nutrition-pill"><span>Protein</span><strong>${member.nutritionFocus?.protein ?? "N/A"}g</strong></div>
+            <div class="nutrition-pill"><span>Carbs</span><strong>${member.nutritionFocus?.carbs ?? "N/A"}g</strong></div>
+            <div class="nutrition-pill"><span>Fat</span><strong>${member.nutritionFocus?.fat ?? "N/A"}g</strong></div>
+            <div class="nutrition-pill"><span>Calcium</span><strong>${member.nutritionFocus?.calcium ?? "N/A"}mg</strong></div>
+            <div class="nutrition-pill"><span>Vitamin D</span><strong>${member.nutritionFocus?.vitaminD ?? "N/A"}mcg</strong></div>
+            <div class="nutrition-pill"><span>Fiber</span><strong>${member.nutritionFocus?.fiber ?? "N/A"}g</strong></div>
+            <div class="nutrition-pill"><span>Sugar</span><strong>${member.nutritionFocus?.sugar ?? "N/A"}g</strong></div>
+          </div>
+        </div>
+      `;
+
+      familyMembersContainer.appendChild(card);
+    });
+
+    const memberCards = familyMembersContainer.querySelectorAll(".member-card");
+
+    memberCards.forEach((card) => {
+      const header = card.querySelector(".member-header");
+      const content = card.querySelector(".member-content");
+
+      if (header && content) {
+        header.addEventListener("click", () => {
+          content.classList.toggle("collapsed");
+        });
+      }
+    });
   }
 
   function renderWeeklyMeals(meals, groceries) {
@@ -221,15 +305,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function loadMealData() {
-    if (!weeklyMealsContainer) return;
+  async function loadDashboardData() {
+    if (weeklyMealsContainer) {
+      weeklyMealsContainer.innerHTML = `<p class="loading-note">Loading dashboard data...</p>`;
+    }
 
-    weeklyMealsContainer.innerHTML = `<p class="loading-note">Loading grocery library and weekly meals...</p>`;
+    if (familyMembersContainer) {
+      familyMembersContainer.innerHTML = `<p class="loading-note">Loading family members...</p>`;
+    }
 
     try {
-      const [groceriesResponse, mealsResponse] = await Promise.all([
+      const [groceriesResponse, mealsResponse, familyResponse] = await Promise.all([
         fetch(GROCERY_LIBRARY_URL),
-        fetch(WEEKLY_MEALS_URL)
+        fetch(WEEKLY_MEALS_URL),
+        fetch(FAMILY_MEMBERS_URL)
       ]);
 
       if (!groceriesResponse.ok) {
@@ -240,20 +329,37 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(`Could not load weekly meals. Status: ${mealsResponse.status}`);
       }
 
+      if (!familyResponse.ok) {
+        throw new Error(`Could not load family members. Status: ${familyResponse.status}`);
+      }
+
       const groceries = await groceriesResponse.json();
       const meals = await mealsResponse.json();
+      const familyMembers = await familyResponse.json();
 
-      renderWeeklyMeals(meals, groceries);
+      renderWeeklyMeals(groceries && meals ? meals : [], groceries || []);
+      renderFamilyMembers(familyMembers || []);
 
       const currentRange = dateSelect ? dateSelect.value : "Today";
       updateDashboard(currentRange);
     } catch (error) {
-      weeklyMealsContainer.innerHTML = `
-        <p class="loading-note">
-          Unable to load meal data from S3. Check file names, object permissions, bucket CORS, and that both JSON files are valid.
-        </p>
-      `;
-      console.error("S3 meal data load error:", error);
+      console.error("Dashboard data load error:", error);
+
+      if (weeklyMealsContainer) {
+        weeklyMealsContainer.innerHTML = `
+          <p class="loading-note">
+            Unable to load meal data from S3. Check file names, object permissions, bucket CORS, and JSON validity.
+          </p>
+        `;
+      }
+
+      if (familyMembersContainer) {
+        familyMembersContainer.innerHTML = `
+          <p class="loading-note">
+            Unable to load family members from S3. Check file names, object permissions, bucket CORS, and JSON validity.
+          </p>
+        `;
+      }
     }
   }
 
@@ -262,17 +368,6 @@ document.addEventListener("DOMContentLoaded", () => {
       updateDashboard(event.target.value);
     });
   }
-
-  memberCards.forEach((card) => {
-    const header = card.querySelector(".member-header");
-    const content = card.querySelector(".member-content");
-
-    if (header && content) {
-      header.addEventListener("click", () => {
-        content.classList.toggle("collapsed");
-      });
-    }
-  });
 
   actionButtons.forEach((button) => {
     const text = button.textContent.trim();
@@ -295,5 +390,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateDashboard("Today");
-  loadMealData();
+  loadDashboardData();
 });
