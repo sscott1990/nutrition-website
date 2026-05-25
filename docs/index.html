@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Nutrition Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <h1>Family Nutrition Dashboard</h1>
+        <p class="subtitle">Scott Household</p>
+      </div>
+
+      <div class="topbar-actions">
+        <select id="dateRange">
+          <option>Today</option>
+          <option>Last 7 Days</option>
+          <option>Last 30 Days</option>
+        </select>
+        <button type="button">Add Family Member</button>
+        <button type="button">Add Grocery</button>
+        <button type="button">Create Meal</button>
+      </div>
+    </header>
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <span>Avg Calories</span>
+        <strong>1,842</strong>
+      </div>
+      <div class="summary-card">
+        <span>Protein</span>
+        <strong>96g</strong>
+      </div>
+      <div class="summary-card">
+        <span>Carbs</span>
+        <strong>188g</strong>
+      </div>
+      <div class="summary-card">
+        <span>Fat</span>
+        <strong>61g</strong>
+      </div>
+      <div class="summary-card">
+        <span>Calcium</span>
+        <strong>78%</strong>
+      </div>
+      <div class="summary-card">
+        <span>Vitamin D</span>
+        <strong>64%</strong>
+      </div>
+      <div class="summary-card alert">
+        <span>Active Alerts</span>
+        <strong>4</strong>
+      </div>
+      <div class="summary-card">
+        <span>Meals Logged</span>
+        <strong id="mealsLoggedCount">0</strong>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Alerts</h2>
+        <p class="panel-note">Click any alert to dismiss it.</p>
+      </div>
+      <div class="alerts"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Family Members</h2>
+        <p class="panel-note">Click a card header to collapse or expand details.</p>
+      </div>
+
+      <div class="member-grid">
+        <article class="member-card">
+          <div class="member-header">
+            <div>
+              <h3>James</h3>
+              <p>Age 35 · Maintain Weight</p>
+            </div>
+            <span class="tag">Adult</span>
+          </div>
+
+          <div class="member-content">
+            <div class="metric">
+              <div class="metric-row"><span>Calories</span><span>2,050 / 2,200</span></div>
+              <div class="progress"><div class="bar good" style="width: 93%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Protein</span><span>122g / 140g</span></div>
+              <div class="progress"><div class="bar good" style="width: 87%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Carbs</span><span>210g / 250g</span></div>
+              <div class="progress"><div class="bar good" style="width: 84%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Fat</span><span>65g / 75g</span></div>
+              <div class="progress"><div class="bar good" style="width: 86%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Calcium</span><span>780mg / 1000mg</span></div>
+              <div class="progress"><div class="bar warning" style="width: 78%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Vitamin D</span><span>12mcg / 15mcg</span></div>
+              <div class="progress"><div class="bar warning" style="width: 80%;"></div></div>
+            </div>
+
+            <div class="weekly-mini">
+              <span>7-day avg: 1,980 cal · 118g protein · 205g carbs</span>
+            </div>
+
+            <div class="card-actions">
+              <button type="button">View Details</button>
+              <button type="button" class="secondary">Edit Profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="member-card diabetic">
+          <div class="member-header">
+            <div>
+              <h3>Sarah</h3>
+              <p>Age 33 · Maintain Weight</p>
+            </div>
+            <span class="tag diabetic-tag">Type 1.5 / LADA</span>
+          </div>
+
+          <div class="member-content">
+            <div class="metric">
+              <div class="metric-row"><span>Calories</span><span>1,720 / 1,900</span></div>
+              <div class="progress"><div class="bar good" style="width: 91%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Protein</span><span>98g / 110g</span></div>
+              <div class="progress"><div class="bar good" style="width: 89%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Carbs</span><span>165g / 180g</span></div>
+              <div class="progress"><div class="bar warning" style="width: 92%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Fat</span><span>58g / 70g</span></div>
+              <div class="progress"><div class="bar good" style="width: 83%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Calcium</span><span>910mg / 1000mg</span></div>
+              <div class="progress"><div class="bar good" style="width: 91%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Vitamin D</span><span>10mcg / 15mcg</span></div>
+              <div class="progress"><div class="bar danger" style="width: 67%;"></div></div>
+            </div>
+
+            <div class="diabetes-panel">
+              <h4>Diabetes Tracking</h4>
+              <p><strong>Latest Glucose:</strong> 186 mg/dL</p>
+              <p><strong>Target Range:</strong> 80–140 mg/dL</p>
+              <p><strong>Carbs Today:</strong> 165g</p>
+              <p><strong>Status:</strong> <span class="status danger-text">High</span></p>
+            </div>
+
+            <div class="weekly-mini">
+              <span>7-day avg: 1,760 cal · 96g protein · 160g carbs</span>
+            </div>
+
+            <div class="card-actions">
+              <button type="button">View Details</button>
+              <button type="button">Log Glucose</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="member-card">
+          <div class="member-header">
+            <div>
+              <h3>Mia</h3>
+              <p>Age 8 · Growth Support</p>
+            </div>
+            <span class="tag">Child</span>
+          </div>
+
+          <div class="member-content">
+            <div class="metric">
+              <div class="metric-row"><span>Calories</span><span>1,320 / 1,500</span></div>
+              <div class="progress"><div class="bar good" style="width: 88%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Protein</span><span>48g / 60g</span></div>
+              <div class="progress"><div class="bar good" style="width: 80%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Carbs</span><span>155g / 180g</span></div>
+              <div class="progress"><div class="bar good" style="width: 86%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Fat</span><span>42g / 50g</span></div>
+              <div class="progress"><div class="bar good" style="width: 84%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Calcium</span><span>640mg / 1000mg</span></div>
+              <div class="progress"><div class="bar danger" style="width: 64%;"></div></div>
+            </div>
+            <div class="metric">
+              <div class="metric-row"><span>Vitamin D</span><span>8mcg / 15mcg</span></div>
+              <div class="progress"><div class="bar danger" style="width: 53%;"></div></div>
+            </div>
+
+            <div class="weekly-mini">
+              <span>7-day avg: 1,280 cal · 46g protein · 150g carbs</span>
+            </div>
+
+            <div class="card-actions">
+              <button type="button">View Details</button>
+              <button type="button" class="secondary">Edit Profile</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel two-column">
+      <div class="subpanel">
+        <div class="panel-header">
+          <h2>Weekly Meal Slots</h2>
+          <p class="panel-note">Nutrient totals are calculated from groceries in the JSON library.</p>
+        </div>
+        <div id="weeklyMeals" class="weekly-meals-grid"></div>
+      </div>
+
+      <div class="subpanel">
+        <div class="panel-header">
+          <h2>Weekly Balance</h2>
+        </div>
+        <ul class="balance-list">
+          <li><span>Calories</span><strong>On Track</strong></li>
+          <li><span>Protein</span><strong class="good-text">Good</strong></li>
+          <li><span>Carbs</span><strong class="warning-text">Watch Sarah's intake</strong></li>
+          <li><span>Fat</span><strong>On Track</strong></li>
+          <li><span>Calcium</span><strong class="danger-text">Low</strong></li>
+          <li><span>Vitamin D</span><strong class="danger-text">Low</strong></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
