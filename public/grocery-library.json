@@ -1,0 +1,155 @@
+[
+  {
+    "id": "eggs",
+    "name": "Eggs",
+    "category": "Protein",
+    "servingSize": 2,
+    "servingUnit": "large eggs",
+    "nutrition": {
+      "calories": 140,
+      "protein": 12,
+      "carbs": 1,
+      "fat": 10,
+      "calcium": 56,
+      "vitaminD": 2.2,
+      "fiber": 0,
+      "sugar": 1
+    }
+  },
+  {
+    "id": "whole-wheat-toast",
+    "name": "Whole Wheat Toast",
+    "category": "Grains",
+    "servingSize": 2,
+    "servingUnit": "slices",
+    "nutrition": {
+      "calories": 160,
+      "protein": 8,
+      "carbs": 28,
+      "fat": 2,
+      "calcium": 80,
+      "vitaminD": 0,
+      "fiber": 4,
+      "sugar": 4
+    }
+  },
+  {
+    "id": "berries",
+    "name": "Mixed Berries",
+    "category": "Fruit",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 70,
+      "protein": 1,
+      "carbs": 17,
+      "fat": 0,
+      "calcium": 24,
+      "vitaminD": 0,
+      "fiber": 5,
+      "sugar": 10
+    }
+  },
+  {
+    "id": "chicken-breast",
+    "name": "Chicken Breast",
+    "category": "Protein",
+    "servingSize": 100,
+    "servingUnit": "g",
+    "nutrition": {
+      "calories": 165,
+      "protein": 31,
+      "carbs": 0,
+      "fat": 3.6,
+      "calcium": 15,
+      "vitaminD": 0,
+      "fiber": 0,
+      "sugar": 0
+    }
+  },
+  {
+    "id": "brown-rice",
+    "name": "Brown Rice",
+    "category": "Grains",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 216,
+      "protein": 5,
+      "carbs": 45,
+      "fat": 1.8,
+      "calcium": 20,
+      "vitaminD": 0,
+      "fiber": 3.5,
+      "sugar": 1
+    }
+  },
+  {
+    "id": "broccoli",
+    "name": "Broccoli",
+    "category": "Vegetable",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 55,
+      "protein": 3.7,
+      "carbs": 11,
+      "fat": 0.6,
+      "calcium": 62,
+      "vitaminD": 0,
+      "fiber": 5,
+      "sugar": 2.2
+    }
+  },
+  {
+    "id": "greek-yogurt",
+    "name": "Greek Yogurt",
+    "category": "Dairy",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 130,
+      "protein": 17,
+      "carbs": 9,
+      "fat": 4,
+      "calcium": 200,
+      "vitaminD": 0,
+      "fiber": 0,
+      "sugar": 6
+    }
+  },
+  {
+    "id": "banana",
+    "name": "Banana",
+    "category": "Fruit",
+    "servingSize": 1,
+    "servingUnit": "medium",
+    "nutrition": {
+      "calories": 105,
+      "protein": 1.3,
+      "carbs": 27,
+      "fat": 0.4,
+      "calcium": 6,
+      "vitaminD": 0,
+      "fiber": 3.1,
+      "sugar": 14
+    }
+  },
+  {
+    "id": "salmon",
+    "name": "Salmon",
+    "category": "Protein",
+    "servingSize": 100,
+    "servingUnit": "g",
+    "nutrition": {
+      "calories": 208,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 13,
+      "calcium": 9,
+      "vitaminD": 10,
+      "fiber": 0,
+      "sugar": 0
+    }
+  }
+]
