@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const weeklyMealsContainer = document.getElementById("weeklyMeals");
   const mealsLoggedCount = document.getElementById("mealsLoggedCount");
 
+  const GROCERY_LIBRARY_URL = "https://nutrition-website-database.s3.us-east-1.amazonaws.com/grocery-library.json";
+  const WEEKLY_MEALS_URL = "https://nutrition-website-database.s3.us-east-1.amazonaws.com/weekly-meals.json";
+
   const dashboardData = {
     "Today": {
       summary: ["1,842", "96g", "188g", "61g", "78%", "64%", "4", "0"],
@@ -38,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateActiveAlertsCount() {
     const countCard = document.querySelector(".summary-card.alert strong");
     const visibleAlerts = alertsContainer.querySelectorAll(".alert-item").length;
+
     if (countCard) {
       countCard.textContent = visibleAlerts;
     }
@@ -101,18 +105,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     meal.ingredients.forEach((item) => {
       const grocery = groceryMap[item.groceryId];
-      if (!grocery) return;
+
+      if (!grocery || !grocery.nutrition) {
+        return;
+      }
 
       ingredientLines.push(`${grocery.name} × ${item.quantity}`);
 
-      totals.calories += grocery.nutrition.calories * item.quantity;
-      totals.protein += grocery.nutrition.protein * item.quantity;
-      totals.carbs += grocery.nutrition.carbs * item.quantity;
-      totals.fat += grocery.nutrition.fat * item.quantity;
-      totals.calcium += grocery.nutrition.calcium * item.quantity;
-      totals.vitaminD += grocery.nutrition.vitaminD * item.quantity;
-      totals.fiber += grocery.nutrition.fiber * item.quantity;
-      totals.sugar += grocery.nutrition.sugar * item.quantity;
+      totals.calories += (grocery.nutrition.calories || 0) * item.quantity;
+      totals.protein += (grocery.nutrition.protein || 0) * item.quantity;
+      totals.carbs += (grocery.nutrition.carbs || 0) * item.quantity;
+      totals.fat += (grocery.nutrition.fat || 0) * item.quantity;
+      totals.calcium += (grocery.nutrition.calcium || 0) * item.quantity;
+      totals.vitaminD += (grocery.nutrition.vitaminD || 0) * item.quantity;
+      totals.fiber += (grocery.nutrition.fiber || 0) * item.quantity;
+      totals.sugar += (grocery.nutrition.sugar || 0) * item.quantity;
     });
 
     return {
@@ -140,6 +147,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     weeklyMealsContainer.innerHTML = "";
 
+    if (!Array.isArray(meals) || meals.length === 0) {
+      weeklyMealsContainer.innerHTML = `<p class="loading-note">No weekly meals found.</p>`;
+      if (mealsLoggedCount) {
+        mealsLoggedCount.textContent = "0";
+      }
+      return;
+    }
+
     meals.forEach((meal) => {
       const mealData = calculateMealNutrition(meal, groceryMap);
 
@@ -155,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <div class="meal-members">
-          <strong>Assigned:</strong> ${meal.members.join(", ")}
+          <strong>Assigned:</strong> ${Array.isArray(meal.members) ? meal.members.join(", ") : ""}
         </div>
 
         <ul class="ingredient-list">
@@ -213,12 +228,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const [groceriesResponse, mealsResponse] = await Promise.all([
-        fetch("grocery-library.json"),
-        fetch("weekly-meals.json")
+        fetch(GROCERY_LIBRARY_URL),
+        fetch(WEEKLY_MEALS_URL)
       ]);
 
-      if (!groceriesResponse.ok || !mealsResponse.ok) {
-        throw new Error("Could not load JSON files.");
+      if (!groceriesResponse.ok) {
+        throw new Error(`Could not load grocery library. Status: ${groceriesResponse.status}`);
+      }
+
+      if (!mealsResponse.ok) {
+        throw new Error(`Could not load weekly meals. Status: ${mealsResponse.status}`);
       }
 
       const groceries = await groceriesResponse.json();
@@ -229,8 +248,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const currentRange = dateSelect ? dateSelect.value : "Today";
       updateDashboard(currentRange);
     } catch (error) {
-      weeklyMealsContainer.innerHTML = `<p class="loading-note">Unable to load meal data. Check that your JSON files are in the public folder and that you're serving the files through a local web server.</p>`;
-      console.error(error);
+      weeklyMealsContainer.innerHTML = `
+        <p class="loading-note">
+          Unable to load meal data from S3. Check file names, object permissions, bucket CORS, and that both JSON files are valid.
+        </p>
+      `;
+      console.error("S3 meal data load error:", error);
     }
   }
 
