@@ -9,11 +9,14 @@
   --warning: #f59e0b;
   --danger: #ef4444;
   --info: #3b82f6;
-  --diabetic-bg: #fdf4ff;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -23,10 +26,82 @@ body {
   color: var(--text);
 }
 
-.app {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 24px;
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+button {
+  border: none;
+  background: var(--primary);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.92;
+}
+
+select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: white;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #111827;
+  color: white;
+  padding: 24px 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand h1 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+}
+
+.brand p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.sidebar-nav {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.sidebar-nav a {
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #e5e7eb;
+  transition: background 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.main-content {
+  padding: 28px;
 }
 
 .topbar {
@@ -37,41 +112,23 @@ body {
   margin-bottom: 24px;
 }
 
-.topbar h1 {
-  margin: 0 0 6px;
+.topbar h2 {
+  margin: 4px 0 0;
   font-size: 2rem;
 }
 
-.subtitle {
+.eyebrow {
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
   color: var(--muted);
 }
 
-.topbar-actions {
+.topbar-controls {
   display: flex;
+  align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
-}
-
-select,
-button {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: white;
-  font-size: 0.95rem;
-}
-
-button {
-  background: var(--primary);
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-button.secondary {
-  background: #e5e7eb;
-  color: var(--text);
 }
 
 .summary-grid {
@@ -85,7 +142,7 @@ button.secondary {
   background: var(--panel);
   padding: 16px;
   border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
 }
 
 .summary-card span {
@@ -108,21 +165,20 @@ button.secondary {
   border-radius: 18px;
   padding: 20px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
 }
 
-.panel-header {
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
   margin-bottom: 16px;
 }
 
-.panel-header h2 {
-  margin: 0 0 4px;
-}
-
-.panel-note {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.92rem;
+.section-heading h2 {
+  margin: 4px 0 0;
+  font-size: 1.35rem;
 }
 
 .alerts {
@@ -152,9 +208,9 @@ button.secondary {
   color: #1d4ed8;
 }
 
-.member-grid {
+#familyMembers {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 18px;
 }
 
@@ -165,160 +221,17 @@ button.secondary {
   background: #fcfdff;
 }
 
-.member-card.diabetic {
-  background: var(--diabetic-bg);
-  border-color: #f5d0fe;
+.member-card h3 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
 }
 
-.member-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  cursor: pointer;
-}
-
-.member-header h3 {
-  margin: 0 0 4px;
-}
-
-.member-header p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-
-.tag {
-  background: #eef2ff;
-  color: #3730a3;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  white-space: nowrap;
-}
-
-.diabetic-tag {
-  background: #f3e8ff;
-  color: #7e22ce;
-}
-
-.metric {
-  margin-bottom: 12px;
-}
-
-.metric-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  font-size: 0.92rem;
-}
-
-.progress {
-  width: 100%;
-  height: 10px;
-  background: #e5e7eb;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.bar {
-  height: 100%;
-  border-radius: 999px;
-}
-
-.bar.good {
-  background: var(--good);
-}
-
-.bar.warning {
-  background: var(--warning);
-}
-
-.bar.danger {
-  background: var(--danger);
-}
-
-.weekly-mini {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.diabetes-panel {
-  margin-top: 16px;
-  padding: 14px;
-  border-radius: 14px;
-  background: white;
-  border: 1px solid #f5d0fe;
-}
-
-.diabetes-panel h4 {
+.member-card p {
   margin: 0 0 10px;
+  line-height: 1.45;
 }
 
-.diabetes-panel p {
-  margin: 6px 0;
-  font-size: 0.94rem;
-}
-
-.card-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-}
-
-.two-column {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 20px;
-}
-
-.subpanel {
-  background: #fcfdff;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-}
-
-.balance-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.balance-list li {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.balance-list li:last-child {
-  border-bottom: none;
-}
-
-.good-text {
-  color: var(--good);
-}
-
-.warning-text {
-  color: var(--warning);
-}
-
-.danger-text {
-  color: var(--danger);
-}
-
-.member-content.collapsed {
-  display: none;
-}
-
-.weekly-meals-grid {
+#weeklyMeals {
   display: grid;
   gap: 14px;
 }
@@ -386,21 +299,50 @@ button.secondary {
   font-size: 0.92rem;
 }
 
+.quick-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .loading-note {
   color: var(--muted);
   font-size: 0.95rem;
 }
 
 @media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
   .topbar {
     flex-direction: column;
   }
 
-  .two-column {
-    grid-template-columns: 1fr;
+  .section-heading {
+    flex-direction: column;
   }
 
   .nutrition-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .nutrition-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #familyMembers {
+    grid-template-columns: 1fr;
   }
 }
