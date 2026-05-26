@@ -11,33 +11,280 @@ document.addEventListener("DOMContentLoaded", () => {
   const WEEKLY_MEALS_URL = "https://nutrition-website-database.s3.us-east-1.amazonaws.com/weekly-meals.json";
   const FAMILY_MEMBERS_URL = "https://nutrition-website-database.s3.us-east-1.amazonaws.com/family-members.json";
 
-  const dashboardData = {
-    "Today": {
-      summary: ["1,842", "96g", "188g", "61g", "78%", "64%", "4", "0"],
-      alerts: [
-        { text: "Household calcium intake is below target for some family members.", type: "warning" },
-        { text: "One or more glucose-related readings may need review this week.", type: "danger" },
-        { text: "Protein intake is below target for at least one family member today.", type: "warning" },
-        { text: "Vitamin D intake is below target for some family members.", type: "info" }
-      ]
-    },
-    "Last 7 Days": {
-      summary: ["1,915", "102g", "194g", "63g", "82%", "69%", "3", "0"],
-      alerts: [
-        { text: "Vitamin D intake has been low for some family members this week.", type: "warning" },
-        { text: "Some glucose readings were above target in the last 7 days.", type: "danger" },
-        { text: "Household protein intake improved this week.", type: "info" }
-      ]
-    },
-    "Last 30 Days": {
-      summary: ["1,888", "99g", "190g", "62g", "80%", "67%", "5", "0"],
-      alerts: [
-        { text: "Calcium intake trends remain below target for part of the household.", type: "danger" },
-        { text: "Glucose trends show occasional spikes after some meals.", type: "warning" },
-        { text: "Overall meal logging consistency is strong this month.", type: "info" }
-      ]
-    }
+  const nutrientKeys = [
+    "calories",
+    "protein",
+    "carbs",
+    "fat",
+    "calcium",
+    "vitaminD",
+    "fiber",
+    "sugar"
+  ];
+
+  let appState = {
+    groceries: [],
+    meals: [],
+    familyMembers: [],
+    perMemberAverages: {},
+    householdSummary: null
   };
+
+  function roundValue(value) {
+    return Math.round((value || 0) * 10) / 10;
+  }
+
+  function calculateBMI(weightLb, heightIn) {
+    if (!weightLb || !heightIn) return null;
+    return roundValue((weightLb / (heightIn * heightIn)) * 703);
+  }
+
+  function getEmptyNutritionTotals() {
+    return {
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0,
+      calcium: 0,
+      vitaminD: 0,
+      fiber: 0,
+      sugar: 0
+    };
+  }
+
+  function calculateMealNutrition(meal, groceryMap) {
+    const totals = getEmptyNutritionTotals();
+    const ingredientLines = [];
+
+    if (!Array.isArray(meal.ingredients)) {
+      return { totals, ingredientLines };
+    }
+
+    meal.ingredients.forEach((item) => {
+      const grocery = groceryMap[item.groceryId];
+
+      if (!grocery || !grocery.nutrition) {
+        ingredientLines.push(`Missing grocery data for "${item.groceryId}" × ${item.quantity}`);
+        return;
+      }
+
+      ingredientLines.push(`${grocery.name} × ${item.quantity}`);
+
+      nutrientKeys.forEach((key) => {
+        totals[key] += (grocery.nutrition[key] || 0) * item.quantity;
+      });
+    });
+
+    nutrientKeys.forEach((key) => {
+      totals[key] = roundValue(totals[key]);
+    });
+
+    return { totals, ingredientLines };
+  }
+
+  function normalizeDayName(day) {
+    return String(day || "").trim().toLowerCase();
+  }
+
+  function getOrderedWeekDays() {
+    return [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ];
+  }
+
+  function buildGroceryMap(groceries) {
+    const groceryMap = {};
+    (groceries || []).forEach((grocery) => {
+      if (grocery && grocery.id) {
+        groceryMap[grocery.id] = grocery;
+      }
+    });
+    return groceryMap;
+  }
+
+  function buildMemberMap(familyMembers) {
+    const memberMap = {};
+    (familyMembers || []).forEach((member) => {
+      if (member && member.name) {
+        memberMap[member.name.toLowerCase()] = member;
+      }
+      if (member && member.id) {
+        memberMap[member.id.toLowerCase()] = member;
+      }
+    });
+    return memberMap;
+  }
+
+  function calculatePerMemberAverages(meals, groceries, familyMembers) {
+    const groceryMap = buildGroceryMap(groceries);
+    const memberMap = buildMemberMap(familyMembers);
+    const orderedDays = getOrderedWeekDays();
+
+    const perMemberTotals = {};
+    const perMemberDayCoverage = {};
+
+    familyMembers.forEach((member) => {
+      perMemberTotals[member.id] = getEmptyNutritionTotals();
+      perMemberDayCoverage[member.id] = new Set();
+    });
+
+    meals.forEach((meal) => {
+      const mealNutrition = calculateMealNutrition(meal, groceryMap).totals;
+      const dayKey = normalizeDayName(meal.day);
+
+      if (!Array.isArray(meal.members)) return;
+
+      meal.members.forEach((memberRef) => {
+        const lookupKey = String(memberRef || "").toLowerCase();
+        const member = memberMap[lookupKey];
+
+        if (!member || !perMemberTotals[member.id]) return;
+
+        nutrientKeys.forEach((key) => {
+          perMemberTotals[member.id][key] += mealNutrition[key];
+        });
+
+        if (orderedDays.includes(dayKey)) {
+          perMemberDayCoverage[member.id].add(dayKey);
+        }
+      });
+    });
+
+    const perMemberAverages = {};
+
+    familyMembers.forEach((member) => {
+      const totals = perMemberTotals[member.id] || getEmptyNutritionTotals();
+
+      perMemberAverages[member.id] = {
+        totals: { ...totals },
+        averages: {}
+      };
+
+      nutrientKeys.forEach((key) => {
+        perMemberAverages[member.id].averages[key] = roundValue(totals[key] / 7);
+      });
+    });
+
+    return perMemberAverages;
+  }
+
+  function calculateHouseholdSummary(familyMembers, perMemberAverages) {
+    if (!familyMembers.length) {
+      return {
+        calories: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+        calciumPercent: 0,
+        vitaminDPercent: 0
+      };
+    }
+
+    let totalCalories = 0;
+    let totalProtein = 0;
+    let totalCarbs = 0;
+    let totalFat = 0;
+    let calciumPercentTotal = 0;
+    let vitaminDPercentTotal = 0;
+
+    familyMembers.forEach((member) => {
+      const data = perMemberAverages[member.id];
+      if (!data) return;
+
+      const avg = data.averages;
+      totalCalories += avg.calories || 0;
+      totalProtein += avg.protein || 0;
+      totalCarbs += avg.carbs || 0;
+      totalFat += avg.fat || 0;
+
+      const calciumTarget = member.nutritionFocus?.calcium || 0;
+      const vitaminDTarget = member.nutritionFocus?.vitaminD || 0;
+
+      const calciumPercent = calciumTarget ? (avg.calcium / calciumTarget) * 100 : 0;
+      const vitaminDPercent = vitaminDTarget ? (avg.vitaminD / vitaminDTarget) * 100 : 0;
+
+      calciumPercentTotal += calciumPercent;
+      vitaminDPercentTotal += vitaminDPercent;
+    });
+
+    return {
+      calories: roundValue(totalCalories / familyMembers.length),
+      protein: roundValue(totalProtein / familyMembers.length),
+      carbs: roundValue(totalCarbs / familyMembers.length),
+      fat: roundValue(totalFat / familyMembers.length),
+      calciumPercent: Math.round(calciumPercentTotal / familyMembers.length),
+      vitaminDPercent: Math.round(vitaminDPercentTotal / familyMembers.length)
+    };
+  }
+
+  function getProgressPercent(current, target) {
+    if (!target || target <= 0) return 0;
+    return Math.max(0, Math.min(140, Math.round((current / target) * 100)));
+  }
+
+  function getBarClass(percent) {
+    if (percent >= 90 && percent <= 110) return "good";
+    if ((percent >= 75 && percent < 90) || (percent > 110 && percent <= 125)) return "warning";
+    return "danger";
+  }
+
+  function formatSummaryValue(value, suffix = "") {
+    if (suffix === "%") return `${Math.round(value)}%`;
+    if (suffix === "g") return `${roundValue(value)}g`;
+    return `${roundValue(value)}`;
+  }
+
+  function renderAlertsFromData(familyMembers, perMemberAverages) {
+    const alerts = [];
+
+    familyMembers.forEach((member) => {
+      const avg = perMemberAverages[member.id]?.averages;
+      if (!avg) return;
+
+      const calciumTarget = member.nutritionFocus?.calcium || 0;
+      const vitaminDTarget = member.nutritionFocus?.vitaminD || 0;
+      const proteinTarget = member.nutritionFocus?.protein || 0;
+
+      if (calciumTarget && avg.calcium < calciumTarget * 0.8) {
+        alerts.push({
+          text: `${member.name} is below 80% of their 7-day calcium target.`,
+          type: "warning"
+        });
+      }
+
+      if (vitaminDTarget && avg.vitaminD < vitaminDTarget * 0.8) {
+        alerts.push({
+          text: `${member.name} is below 80% of their 7-day vitamin D target.`,
+          type: "warning"
+        });
+      }
+
+      if (proteinTarget && avg.protein < proteinTarget * 0.8) {
+        alerts.push({
+          text: `${member.name} is below 80% of their 7-day protein target.`,
+          type: "info"
+        });
+      }
+
+      const hasDiabetesCondition = Array.isArray(member.conditions)
+        && member.conditions.some((condition) => condition.toLowerCase().includes("diabetes"));
+
+      if (hasDiabetesCondition && member.nutritionFocus?.carbs && avg.carbs > member.nutritionFocus.carbs * 1.1) {
+        alerts.push({
+          text: `${member.name}'s 7-day carbohydrate average is above their target range.`,
+          type: "danger"
+        });
+      }
+    });
+
+    return alerts.slice(0, 8);
+  }
 
   function updateActiveAlertsCount() {
     const countCard = document.querySelector(".summary-card.alert strong");
@@ -52,6 +299,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!alertsContainer) return;
 
     alertsContainer.innerHTML = "";
+
+    if (!alerts.length) {
+      alertsContainer.innerHTML = `<div class="alert-item info">No active nutrition alerts right now.</div>`;
+      updateActiveAlertsCount();
+      return;
+    }
 
     alerts.forEach((alertItem) => {
       const div = document.createElement("div");
@@ -71,86 +324,53 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateDashboard(range) {
-    const data = dashboardData[range];
-    if (!data) return;
+    const householdSummary = appState.householdSummary;
+
+    if (!householdSummary) return;
+
+    const summaryData = [
+      formatSummaryValue(householdSummary.calories),
+      formatSummaryValue(householdSummary.protein, "g"),
+      formatSummaryValue(householdSummary.carbs, "g"),
+      formatSummaryValue(householdSummary.fat, "g"),
+      formatSummaryValue(householdSummary.calciumPercent, "%"),
+      formatSummaryValue(householdSummary.vitaminDPercent, "%"),
+      "0",
+      String((appState.meals || []).length)
+    ];
 
     summaryValues.forEach((element, index) => {
-      if (data.summary[index] !== undefined) {
-        element.textContent = data.summary[index];
+      if (summaryData[index] !== undefined) {
+        element.textContent = summaryData[index];
       }
     });
 
-    renderAlerts(data.alerts);
+    const alerts = renderAlertsFromData(appState.familyMembers, appState.perMemberAverages);
+    renderAlerts(alerts);
 
-    if (mealsLoggedCount && weeklyMealsContainer) {
-      const mealCount = weeklyMealsContainer.querySelectorAll(".weekly-meal-card").length;
-      mealsLoggedCount.textContent = mealCount;
+    if (mealsLoggedCount) {
+      mealsLoggedCount.textContent = String((appState.meals || []).length);
     }
   }
 
-  function roundValue(value) {
-    return Math.round(value * 10) / 10;
+  function createMetricRow(label, current, target, unit = "") {
+    const percent = getProgressPercent(current, target);
+    const barClass = getBarClass(percent);
+
+    return `
+      <div class="metric">
+        <div class="metric-row">
+          <span>${label}</span>
+          <span>${roundValue(current)}${unit} / ${roundValue(target)}${unit}</span>
+        </div>
+        <div class="progress">
+          <div class="bar ${barClass}" style="width: ${Math.min(percent, 100)}%;"></div>
+        </div>
+      </div>
+    `;
   }
 
-  function calculateBMI(weightLb, heightIn) {
-    if (!weightLb || !heightIn) return null;
-    return roundValue((weightLb / (heightIn * heightIn)) * 703);
-  }
-
-  function calculateMealNutrition(meal, groceryMap) {
-    const totals = {
-      calories: 0,
-      protein: 0,
-      carbs: 0,
-      fat: 0,
-      calcium: 0,
-      vitaminD: 0,
-      fiber: 0,
-      sugar: 0
-    };
-
-    const ingredientLines = [];
-
-    if (!Array.isArray(meal.ingredients)) {
-      return { totals, ingredientLines };
-    }
-
-    meal.ingredients.forEach((item) => {
-      const grocery = groceryMap[item.groceryId];
-
-      if (!grocery || !grocery.nutrition) {
-        ingredientLines.push(`Missing grocery data for "${item.groceryId}" × ${item.quantity}`);
-        return;
-      }
-
-      ingredientLines.push(`${grocery.name} × ${item.quantity}`);
-
-      totals.calories += (grocery.nutrition.calories || 0) * item.quantity;
-      totals.protein += (grocery.nutrition.protein || 0) * item.quantity;
-      totals.carbs += (grocery.nutrition.carbs || 0) * item.quantity;
-      totals.fat += (grocery.nutrition.fat || 0) * item.quantity;
-      totals.calcium += (grocery.nutrition.calcium || 0) * item.quantity;
-      totals.vitaminD += (grocery.nutrition.vitaminD || 0) * item.quantity;
-      totals.fiber += (grocery.nutrition.fiber || 0) * item.quantity;
-      totals.sugar += (grocery.nutrition.sugar || 0) * item.quantity;
-    });
-
-    return {
-      totals: {
-        calories: roundValue(totals.calories),
-        protein: roundValue(totals.protein),
-        carbs: roundValue(totals.carbs),
-        fat: roundValue(totals.fat),
-        calcium: roundValue(totals.calcium),
-        vitaminD: roundValue(totals.vitaminD),
-        fiber: roundValue(totals.fiber),
-        sugar: roundValue(totals.sugar)
-      },
-      ingredientLines
-    };
-  }
-
-  function renderFamilyMembers(members) {
+  function renderFamilyMembers(members, perMemberAverages) {
     if (!familyMembersContainer) return;
 
     familyMembersContainer.innerHTML = "";
@@ -162,6 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     members.forEach((member) => {
       const bmi = calculateBMI(member.weightLb, member.heightIn);
+      const averageData = perMemberAverages[member.id]?.averages || getEmptyNutritionTotals();
       const conditionsText =
         Array.isArray(member.conditions) && member.conditions.length
           ? member.conditions.join(", ")
@@ -171,29 +392,43 @@ document.addEventListener("DOMContentLoaded", () => {
           ? member.healthGoals.join(", ")
           : "No goals listed";
 
+      const hasDiabetes = Array.isArray(member.conditions)
+        && member.conditions.some((condition) => condition.toLowerCase().includes("diabetes"));
+
       const card = document.createElement("article");
-      card.className = "member-card";
+      card.className = `member-card${hasDiabetes ? " diabetic" : ""}`;
 
       card.innerHTML = `
-        <h3>${member.name}</h3>
-        <p><strong>Age:</strong> ${member.age ?? "N/A"} years old</p>
-        <p><strong>Sex:</strong> ${member.sex ?? "N/A"}</p>
-        <p><strong>Weight:</strong> ${member.weightLb ?? "N/A"} lbs</p>
-        <p><strong>Height:</strong> ${member.heightIn ?? "N/A"} in</p>
-        <p><strong>BMI:</strong> ${bmi ?? "N/A"}</p>
-        <p><strong>Goals:</strong> ${goalsText}</p>
-        <p><strong>Conditions:</strong> ${conditionsText}</p>
-        <p><strong>Notes:</strong> ${member.notes || "No notes provided."}</p>
+        <div class="member-header">
+          <div>
+            <h3>${member.name}</h3>
+            <p>${member.age ?? "N/A"} years old · ${member.sex ?? "N/A"}</p>
+          </div>
+          <span class="tag ${hasDiabetes ? "diabetic-tag" : ""}">
+            ${hasDiabetes ? "Diabetes Focus" : "7-Day Avg"}
+          </span>
+        </div>
 
-        <div class="nutrition-grid">
-          <div class="nutrition-pill"><span>Calories</span><strong>${member.nutritionFocus?.calories ?? "N/A"}</strong></div>
-          <div class="nutrition-pill"><span>Protein</span><strong>${member.nutritionFocus?.protein ?? "N/A"}g</strong></div>
-          <div class="nutrition-pill"><span>Carbs</span><strong>${member.nutritionFocus?.carbs ?? "N/A"}g</strong></div>
-          <div class="nutrition-pill"><span>Fat</span><strong>${member.nutritionFocus?.fat ?? "N/A"}g</strong></div>
-          <div class="nutrition-pill"><span>Calcium</span><strong>${member.nutritionFocus?.calcium ?? "N/A"}mg</strong></div>
-          <div class="nutrition-pill"><span>Vitamin D</span><strong>${member.nutritionFocus?.vitaminD ?? "N/A"}mcg</strong></div>
-          <div class="nutrition-pill"><span>Fiber</span><strong>${member.nutritionFocus?.fiber ?? "N/A"}g</strong></div>
-          <div class="nutrition-pill"><span>Sugar</span><strong>${member.nutritionFocus?.sugar ?? "N/A"}g</strong></div>
+        <div class="member-content">
+          <p><strong>Weight:</strong> ${member.weightLb ?? "N/A"} lbs</p>
+          <p><strong>Height:</strong> ${member.heightIn ?? "N/A"} in</p>
+          <p><strong>BMI:</strong> ${bmi ?? "N/A"}</p>
+          <p><strong>Goals:</strong> ${goalsText}</p>
+          <p><strong>Conditions:</strong> ${conditionsText}</p>
+          <p><strong>Notes:</strong> ${member.notes || "No notes provided."}</p>
+
+          ${createMetricRow("Calories", averageData.calories, member.nutritionFocus?.calories || 0)}
+          ${createMetricRow("Protein", averageData.protein, member.nutritionFocus?.protein || 0, "g")}
+          ${createMetricRow("Carbs", averageData.carbs, member.nutritionFocus?.carbs || 0, "g")}
+          ${createMetricRow("Fat", averageData.fat, member.nutritionFocus?.fat || 0, "g")}
+          ${createMetricRow("Calcium", averageData.calcium, member.nutritionFocus?.calcium || 0, "mg")}
+          ${createMetricRow("Vitamin D", averageData.vitaminD, member.nutritionFocus?.vitaminD || 0, "mcg")}
+          ${createMetricRow("Fiber", averageData.fiber, member.nutritionFocus?.fiber || 0, "g")}
+          ${createMetricRow("Sugar", averageData.sugar, member.nutritionFocus?.sugar || 0, "g")}
+
+          <div class="weekly-mini">
+            <span>Rolling 7-day average based on assigned meals.</span>
+          </div>
         </div>
       `;
 
@@ -204,12 +439,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderWeeklyMeals(meals, groceries) {
     if (!weeklyMealsContainer) return;
 
-    const groceryMap = {};
-    (groceries || []).forEach((grocery) => {
-      if (grocery && grocery.id) {
-        groceryMap[grocery.id] = grocery;
-      }
-    });
+    const groceryMap = buildGroceryMap(groceries);
 
     weeklyMealsContainer.innerHTML = "";
 
@@ -319,10 +549,29 @@ document.addEventListener("DOMContentLoaded", () => {
       const meals = await mealsResponse.json();
       const familyMembers = await familyResponse.json();
 
-      renderWeeklyMeals(Array.isArray(meals) ? meals : [], Array.isArray(groceries) ? groceries : []);
-      renderFamilyMembers(Array.isArray(familyMembers) ? familyMembers : []);
+      const perMemberAverages = calculatePerMemberAverages(
+        Array.isArray(meals) ? meals : [],
+        Array.isArray(groceries) ? groceries : [],
+        Array.isArray(familyMembers) ? familyMembers : []
+      );
 
-      const currentRange = dateSelect ? dateSelect.value : "Today";
+      const householdSummary = calculateHouseholdSummary(
+        Array.isArray(familyMembers) ? familyMembers : [],
+        perMemberAverages
+      );
+
+      appState = {
+        groceries: Array.isArray(groceries) ? groceries : [],
+        meals: Array.isArray(meals) ? meals : [],
+        familyMembers: Array.isArray(familyMembers) ? familyMembers : [],
+        perMemberAverages,
+        householdSummary
+      };
+
+      renderWeeklyMeals(appState.meals, appState.groceries);
+      renderFamilyMembers(appState.familyMembers, appState.perMemberAverages);
+
+      const currentRange = dateSelect ? dateSelect.value : "Last 7 Days";
       updateDashboard(currentRange);
     } catch (error) {
       console.error("Dashboard data load error:", error);
@@ -371,6 +620,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  updateDashboard("Today");
   loadDashboardData();
 });

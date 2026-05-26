@@ -231,6 +231,82 @@ select {
   line-height: 1.45;
 }
 
+.member-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.tag {
+  background: #eef2ff;
+  color: #3730a3;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.member-card.diabetic {
+  background: #fdf4ff;
+  border-color: #f5d0fe;
+}
+
+.diabetic-tag {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.member-content {
+  display: block;
+}
+
+.metric {
+  margin-bottom: 12px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-size: 0.92rem;
+}
+
+.progress {
+  width: 100%;
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.bar.good {
+  background: var(--good);
+}
+
+.bar.warning {
+  background: var(--warning);
+}
+
+.bar.danger {
+  background: var(--danger);
+}
+
+.weekly-mini {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 #weeklyMeals {
   display: grid;
   gap: 14px;

@@ -1,0 +1,156 @@
+[
+  {
+    "id": "steven",
+    "name": "Steven",
+    "age": 35,
+    "sex": "male",
+    "weightLb": 185,
+    "heightIn": 71,
+    "healthGoals": ["Build muscle"],
+    "allergies": [],
+    "conditions": [],
+    "notes": "Adult BMI is about 25.8. Goal set toward high protein and slight calorie surplus for muscle gain.",
+    "nutritionFocus": {
+      "calories": 2800,
+      "protein": 170,
+      "carbs": 300,
+      "fat": 85,
+      "calcium": 1000,
+      "vitaminD": 15,
+      "fiber": 38,
+      "sugar": 45
+    }
+  },
+  {
+    "id": "carlotta",
+    "name": "Carlotta",
+    "age": 31,
+    "sex": "female",
+    "weightLb": 170,
+    "heightIn": 66,
+    "healthGoals": ["Maintain weight", "Support stable glucose"],
+    "allergies": [],
+    "conditions": ["Type 1.5 diabetes"],
+    "notes": "Adult BMI is about 27.4. Calorie goal set for maintenance range; carbs should be distributed consistently and coordinated with her clinician's diabetes plan.",
+    "nutritionFocus": {
+      "calories": 2000,
+      "protein": 110,
+      "carbs": 180,
+      "fat": 78,
+      "calcium": 1000,
+      "vitaminD": 15,
+      "fiber": 28,
+      "sugar": 30
+    }
+  },
+  {
+    "id": "greyson",
+    "name": "Greyson",
+    "age": 12,
+    "sex": "male",
+    "weightLb": 100,
+    "heightIn": 63,
+    "healthGoals": ["Support growth", "Build strength for age", "Balanced energy"],
+    "allergies": [],
+    "conditions": [],
+    "notes": "BMI is about 17.7, but child assessment should use CDC BMI-for-age percentile. Recommendation focuses on steady growth, protein at meals, calcium/vitamin D, and regular meals/snacks.",
+    "nutritionFocus": {
+      "calories": 2200,
+      "protein": 75,
+      "carbs": 275,
+      "fat": 73,
+      "calcium": 1300,
+      "vitaminD": 15,
+      "fiber": 31,
+      "sugar": 35
+    }
+  },
+  {
+    "id": "elleanor",
+    "name": "Elleanor",
+    "age": 7,
+    "sex": "female",
+    "weightLb": 83.6,
+    "heightIn": 52,
+    "healthGoals": ["Support growth", "Encourage nutrient density", "Maintain healthy eating patterns"],
+    "allergies": [],
+    "conditions": [],
+    "notes": "BMI is about 21.7, but child assessment should use CDC BMI-for-age percentile. Recommendation emphasizes growth-supportive meals, limiting excess sugary drinks, and prioritizing fiber, calcium, and protein.",
+    "nutritionFocus": {
+      "calories": 1600,
+      "protein": 45,
+      "carbs": 200,
+      "fat": 53,
+      "calcium": 1000,
+      "vitaminD": 15,
+      "fiber": 25,
+      "sugar": 24
+    }
+  },
+  {
+    "id": "euan",
+    "name": "Euan",
+    "age": 5,
+    "sex": "male",
+    "weightLb": 45,
+    "heightIn": 47,
+    "healthGoals": ["Support growth", "Consistent meals and snacks", "Build variety in foods"],
+    "allergies": [],
+    "conditions": [],
+    "notes": "BMI is about 14.3, but child assessment should use CDC BMI-for-age percentile. Recommendation is a balanced age-appropriate intake with protein, dairy or equivalent, fruit, vegetables, and whole grains.",
+    "nutritionFocus": {
+      "calories": 1400,
+      "protein": 30,
+      "carbs": 175,
+      "fat": 47,
+      "calcium": 1000,
+      "vitaminD": 15,
+      "fiber": 20,
+      "sugar": 20
+    }
+  },
+  {
+    "id": "penelope",
+    "name": "Penelope",
+    "age": 11,
+    "sex": "female",
+    "weightLb": 100,
+    "heightIn": 63,
+    "healthGoals": ["Support growth", "Balanced energy", "Bone health"],
+    "allergies": [],
+    "conditions": [],
+    "notes": "BMI is about 17.7, but child assessment should use CDC BMI-for-age percentile. Recommendation emphasizes balanced meals, calcium/vitamin D, and regular protein intake.",
+    "nutritionFocus": {
+      "calories": 2100,
+      "protein": 70,
+      "carbs": 260,
+      "fat": 70,
+      "calcium": 1300,
+      "vitaminD": 15,
+      "fiber": 26,
+      "sugar": 32
+    }
+  },
+  {
+    "id": "garrett",
+    "name": "Garrett",
+    "age": 9,
+    "sex": "male",
+    "weightLb": 100,
+    "heightIn": 60,
+    "healthGoals": ["Support growth", "Encourage balanced portions", "Build healthy habits"],
+    "allergies": [],
+    "conditions": [],
+    "notes": "BMI is about 19.5, but child assessment should use CDC BMI-for-age percentile. Recommendation focuses on structured meals, fruits/vegetables, protein at meals, and minimizing sugar-heavy snacks.",
+    "nutritionFocus": {
+      "calories": 1800,
+      "protein": 55,
+      "carbs": 225,
+      "fat": 60,
+      "calcium": 1300,
+      "vitaminD": 15,
+      "fiber": 31,
+      "sugar": 26
+    }
+  }
+]

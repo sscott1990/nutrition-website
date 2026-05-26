@@ -1,0 +1,261 @@
+[
+  {
+    "id": "meal-1",
+    "day": "Monday",
+    "mealType": "Breakfast",
+    "name": "Oatmeal, Banana, and Greek Yogurt",
+    "members": ["Steven", "Carlotta", "Greyson", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "oats", "quantity": 1 },
+      { "groceryId": "milk", "quantity": 1 },
+      { "groceryId": "banana", "quantity": 1 },
+      { "groceryId": "greek-yogurt", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-2",
+    "day": "Monday",
+    "mealType": "Lunch",
+    "name": "Turkey Sandwiches and Apple Slices",
+    "members": ["Carlotta", "Greyson", "Elleanor", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "whole-wheat-bread", "quantity": 2 },
+      { "groceryId": "turkey", "quantity": 1 },
+      { "groceryId": "cheddar-cheese", "quantity": 1 },
+      { "groceryId": "apple", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-3",
+    "day": "Monday",
+    "mealType": "Dinner",
+    "name": "Chicken, Rice, and Broccoli",
+    "members": ["Steven", "Carlotta", "Greyson", "Elleanor", "Euan", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "chicken-breast", "quantity": 2 },
+      { "groceryId": "rice", "quantity": 2 },
+      { "groceryId": "broccoli", "quantity": 2 }
+    ]
+  },
+  {
+    "id": "meal-4",
+    "day": "Tuesday",
+    "mealType": "Breakfast",
+    "name": "Eggs, Toast, and Strawberries",
+    "members": ["Steven", "Carlotta", "Greyson", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "eggs", "quantity": 2 },
+      { "groceryId": "whole-wheat-bread", "quantity": 2 },
+      { "groceryId": "strawberries", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-5",
+    "day": "Tuesday",
+    "mealType": "Lunch",
+    "name": "Greek Yogurt, Banana, and Peanut Butter",
+    "members": ["Elleanor", "Euan"],
+    "ingredients": [
+      { "groceryId": "greek-yogurt", "quantity": 1 },
+      { "groceryId": "banana", "quantity": 1 },
+      { "groceryId": "peanut-butter", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-6",
+    "day": "Tuesday",
+    "mealType": "Dinner",
+    "name": "Ground Beef Pasta with Spinach",
+    "members": ["Steven", "Carlotta", "Greyson", "Elleanor", "Euan", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "ground-beef", "quantity": 2 },
+      { "groceryId": "pasta", "quantity": 2 },
+      { "groceryId": "marinara", "quantity": 1 },
+      { "groceryId": "spinach", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-7",
+    "day": "Wednesday",
+    "mealType": "Breakfast",
+    "name": "Oats with Milk and Strawberries",
+    "members": ["Carlotta", "Greyson", "Elleanor", "Penelope"],
+    "ingredients": [
+      { "groceryId": "oats", "quantity": 1 },
+      { "groceryId": "milk", "quantity": 1 },
+      { "groceryId": "strawberries", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-8",
+    "day": "Wednesday",
+    "mealType": "Lunch",
+    "name": "Turkey and Cheese Rollups with Apple",
+    "members": ["Steven", "Carlotta", "Greyson", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "turkey", "quantity": 2 },
+      { "groceryId": "cheddar-cheese", "quantity": 1 },
+      { "groceryId": "apple", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-9",
+    "day": "Wednesday",
+    "mealType": "Dinner",
+    "name": "Salmon, Sweet Potato, and Green Beans",
+    "members": ["Steven", "Carlotta", "Greyson", "Elleanor", "Euan", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "salmon", "quantity": 2 },
+      { "groceryId": "sweet-potato", "quantity": 2 },
+      { "groceryId": "green-beans", "quantity": 2 }
+    ]
+  },
+  {
+    "id": "meal-10",
+    "day": "Thursday",
+    "mealType": "Breakfast",
+    "name": "Eggs and Oatmeal",
+    "members": ["Steven", "Carlotta", "Greyson", "Garrett"],
+    "ingredients": [
+      { "groceryId": "eggs", "quantity": 2 },
+      { "groceryId": "oats", "quantity": 1 },
+      { "groceryId": "milk", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-11",
+    "day": "Thursday",
+    "mealType": "Lunch",
+    "name": "Peanut Butter Sandwiches and Banana",
+    "members": ["Elleanor", "Euan", "Penelope"],
+    "ingredients": [
+      { "groceryId": "whole-wheat-bread", "quantity": 2 },
+      { "groceryId": "peanut-butter", "quantity": 1 },
+      { "groceryId": "banana", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-12",
+    "day": "Thursday",
+    "mealType": "Dinner",
+    "name": "Chicken Rice Bowls with Broccoli",
+    "members": ["Steven", "Carlotta", "Greyson", "Elleanor", "Euan", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "chicken-breast", "quantity": 2 },
+      { "groceryId": "rice", "quantity": 2 },
+      { "groceryId": "broccoli", "quantity": 2 },
+      { "groceryId": "spinach", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-13",
+    "day": "Friday",
+    "mealType": "Breakfast",
+    "name": "Greek Yogurt with Banana and Strawberries",
+    "members": ["Steven", "Carlotta", "Greyson", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "greek-yogurt", "quantity": 1 },
+      { "groceryId": "banana", "quantity": 1 },
+      { "groceryId": "strawberries", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-14",
+    "day": "Friday",
+    "mealType": "Lunch",
+    "name": "Turkey Sandwiches",
+    "members": ["Steven", "Carlotta", "Greyson", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "whole-wheat-bread", "quantity": 2 },
+      { "groceryId": "turkey", "quantity": 1 },
+      { "groceryId": "cheddar-cheese", "quantity": 1 },
+      { "groceryId": "spinach", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-15",
+    "day": "Friday",
+    "mealType": "Dinner",
+    "name": "Ground Beef Pasta Night",
+    "members": ["Steven", "Carlotta", "Greyson", "Elleanor", "Euan", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "ground-beef", "quantity": 2 },
+      { "groceryId": "pasta", "quantity": 2 },
+      { "groceryId": "marinara", "quantity": 1 },
+      { "groceryId": "green-beans", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-16",
+    "day": "Saturday",
+    "mealType": "Breakfast",
+    "name": "Eggs, Toast, and Apple",
+    "members": ["Steven", "Carlotta", "Greyson", "Elleanor", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "eggs", "quantity": 2 },
+      { "groceryId": "whole-wheat-bread", "quantity": 2 },
+      { "groceryId": "apple", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-17",
+    "day": "Saturday",
+    "mealType": "Lunch",
+    "name": "Peanut Butter Banana Snack Lunch",
+    "members": ["Elleanor", "Euan"],
+    "ingredients": [
+      { "groceryId": "banana", "quantity": 1 },
+      { "groceryId": "peanut-butter", "quantity": 1 },
+      { "groceryId": "milk", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-18",
+    "day": "Saturday",
+    "mealType": "Dinner",
+    "name": "Salmon with Rice and Broccoli",
+    "members": ["Steven", "Carlotta", "Greyson", "Elleanor", "Euan", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "salmon", "quantity": 2 },
+      { "groceryId": "rice", "quantity": 2 },
+      { "groceryId": "broccoli", "quantity": 2 }
+    ]
+  },
+  {
+    "id": "meal-19",
+    "day": "Sunday",
+    "mealType": "Breakfast",
+    "name": "Oatmeal with Banana",
+    "members": ["Steven", "Carlotta", "Greyson", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "oats", "quantity": 1 },
+      { "groceryId": "milk", "quantity": 1 },
+      { "groceryId": "banana", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-20",
+    "day": "Sunday",
+    "mealType": "Lunch",
+    "name": "Turkey and Cheese Plates",
+    "members": ["Steven", "Carlotta", "Greyson", "Elleanor", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "turkey", "quantity": 2 },
+      { "groceryId": "cheddar-cheese", "quantity": 1 },
+      { "groceryId": "apple", "quantity": 1 },
+      { "groceryId": "strawberries", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "meal-21",
+    "day": "Sunday",
+    "mealType": "Dinner",
+    "name": "Chicken, Sweet Potato, and Green Beans",
+    "members": ["Steven", "Carlotta", "Greyson", "Elleanor", "Euan", "Penelope", "Garrett"],
+    "ingredients": [
+      { "groceryId": "chicken-breast", "quantity": 2 },
+      { "groceryId": "sweet-potato", "quantity": 2 },
+      { "groceryId": "green-beans", "quantity": 2 }
+    ]
+  }
+]
