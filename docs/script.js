@@ -146,9 +146,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!member || !perMemberTotals[member.id]) return;
 
-        nutrientKeys.forEach((key) => {
-          perMemberTotals[member.id][key] += mealNutrition[key];
-        });
+        const servingMultiplier = member.servingMultiplier || 1;
+
+nutrientKeys.forEach((key) => {
+  perMemberTotals[member.id][key] += mealNutrition[key] * servingMultiplier;
+});
 
         if (orderedDays.includes(dayKey)) {
           perMemberDayCoverage[member.id].add(dayKey);

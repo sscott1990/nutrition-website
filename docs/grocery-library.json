@@ -1,0 +1,359 @@
+[
+  {
+    "id": "eggs",
+    "name": "Eggs",
+    "category": "Protein",
+    "servingSize": 2,
+    "servingUnit": "large eggs",
+    "nutrition": {
+      "calories": 140,
+      "protein": 12,
+      "carbs": 1,
+      "fat": 10,
+      "calcium": 56,
+      "vitaminD": 2.2,
+      "fiber": 0,
+      "sugar": 1
+    }
+  },
+  {
+    "id": "milk",
+    "name": "Milk",
+    "category": "Dairy",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 122,
+      "protein": 8,
+      "carbs": 12,
+      "fat": 5,
+      "calcium": 305,
+      "vitaminD": 2.9,
+      "fiber": 0,
+      "sugar": 12
+    }
+  },
+  {
+    "id": "greek-yogurt",
+    "name": "Greek Yogurt",
+    "category": "Dairy",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 130,
+      "protein": 17,
+      "carbs": 9,
+      "fat": 4,
+      "calcium": 200,
+      "vitaminD": 0,
+      "fiber": 0,
+      "sugar": 6
+    }
+  },
+  {
+    "id": "cheddar-cheese",
+    "name": "Cheddar Cheese",
+    "category": "Dairy",
+    "servingSize": 1,
+    "servingUnit": "oz",
+    "nutrition": {
+      "calories": 115,
+      "protein": 7,
+      "carbs": 1,
+      "fat": 9,
+      "calcium": 200,
+      "vitaminD": 0.2,
+      "fiber": 0,
+      "sugar": 0
+    }
+  },
+  {
+    "id": "oats",
+    "name": "Oats",
+    "category": "Grains",
+    "servingSize": 0.5,
+    "servingUnit": "cup dry",
+    "nutrition": {
+      "calories": 150,
+      "protein": 5,
+      "carbs": 27,
+      "fat": 3,
+      "calcium": 20,
+      "vitaminD": 0,
+      "fiber": 4,
+      "sugar": 1
+    }
+  },
+  {
+    "id": "whole-wheat-bread",
+    "name": "Whole Wheat Bread",
+    "category": "Grains",
+    "servingSize": 2,
+    "servingUnit": "slices",
+    "nutrition": {
+      "calories": 160,
+      "protein": 8,
+      "carbs": 28,
+      "fat": 2,
+      "calcium": 80,
+      "vitaminD": 0,
+      "fiber": 4,
+      "sugar": 4
+    }
+  },
+  {
+    "id": "pasta",
+    "name": "Pasta",
+    "category": "Grains",
+    "servingSize": 1,
+    "servingUnit": "cup cooked",
+    "nutrition": {
+      "calories": 200,
+      "protein": 7,
+      "carbs": 42,
+      "fat": 1.5,
+      "calcium": 10,
+      "vitaminD": 0,
+      "fiber": 2,
+      "sugar": 1
+    }
+  },
+  {
+    "id": "rice",
+    "name": "Rice",
+    "category": "Grains",
+    "servingSize": 1,
+    "servingUnit": "cup cooked",
+    "nutrition": {
+      "calories": 216,
+      "protein": 5,
+      "carbs": 45,
+      "fat": 1.8,
+      "calcium": 20,
+      "vitaminD": 0,
+      "fiber": 3.5,
+      "sugar": 1
+    }
+  },
+  {
+    "id": "chicken-breast",
+    "name": "Chicken Breast",
+    "category": "Protein",
+    "servingSize": 100,
+    "servingUnit": "g",
+    "nutrition": {
+      "calories": 165,
+      "protein": 31,
+      "carbs": 0,
+      "fat": 3.6,
+      "calcium": 15,
+      "vitaminD": 0,
+      "fiber": 0,
+      "sugar": 0
+    }
+  },
+  {
+    "id": "ground-beef",
+    "name": "Ground Beef",
+    "category": "Protein",
+    "servingSize": 100,
+    "servingUnit": "g",
+    "nutrition": {
+      "calories": 250,
+      "protein": 26,
+      "carbs": 0,
+      "fat": 17,
+      "calcium": 18,
+      "vitaminD": 0,
+      "fiber": 0,
+      "sugar": 0
+    }
+  },
+  {
+    "id": "turkey",
+    "name": "Turkey",
+    "category": "Protein",
+    "servingSize": 3,
+    "servingUnit": "oz",
+    "nutrition": {
+      "calories": 125,
+      "protein": 24,
+      "carbs": 1,
+      "fat": 2,
+      "calcium": 10,
+      "vitaminD": 0,
+      "fiber": 0,
+      "sugar": 1
+    }
+  },
+  {
+    "id": "salmon",
+    "name": "Salmon",
+    "category": "Protein",
+    "servingSize": 100,
+    "servingUnit": "g",
+    "nutrition": {
+      "calories": 208,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 13,
+      "calcium": 9,
+      "vitaminD": 10,
+      "fiber": 0,
+      "sugar": 0
+    }
+  },
+  {
+    "id": "peanut-butter",
+    "name": "Peanut Butter",
+    "category": "Protein",
+    "servingSize": 2,
+    "servingUnit": "tbsp",
+    "nutrition": {
+      "calories": 190,
+      "protein": 8,
+      "carbs": 7,
+      "fat": 16,
+      "calcium": 17,
+      "vitaminD": 0,
+      "fiber": 2,
+      "sugar": 3
+    }
+  },
+  {
+    "id": "broccoli",
+    "name": "Broccoli",
+    "category": "Vegetable",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 55,
+      "protein": 3.7,
+      "carbs": 11,
+      "fat": 0.6,
+      "calcium": 62,
+      "vitaminD": 0,
+      "fiber": 5,
+      "sugar": 2.2
+    }
+  },
+  {
+    "id": "spinach",
+    "name": "Spinach",
+    "category": "Vegetable",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 7,
+      "protein": 0.9,
+      "carbs": 1.1,
+      "fat": 0.1,
+      "calcium": 30,
+      "vitaminD": 0,
+      "fiber": 0.7,
+      "sugar": 0.1
+    }
+  },
+  {
+    "id": "green-beans",
+    "name": "Green Beans",
+    "category": "Vegetable",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 44,
+      "protein": 2.4,
+      "carbs": 10,
+      "fat": 0.3,
+      "calcium": 37,
+      "vitaminD": 0,
+      "fiber": 4,
+      "sugar": 3.6
+    }
+  },
+  {
+    "id": "sweet-potato",
+    "name": "Sweet Potato",
+    "category": "Vegetable",
+    "servingSize": 1,
+    "servingUnit": "medium",
+    "nutrition": {
+      "calories": 112,
+      "protein": 2,
+      "carbs": 26,
+      "fat": 0.1,
+      "calcium": 40,
+      "vitaminD": 0,
+      "fiber": 4,
+      "sugar": 5
+    }
+  },
+  {
+    "id": "banana",
+    "name": "Banana",
+    "category": "Fruit",
+    "servingSize": 1,
+    "servingUnit": "medium",
+    "nutrition": {
+      "calories": 105,
+      "protein": 1.3,
+      "carbs": 27,
+      "fat": 0.4,
+      "calcium": 6,
+      "vitaminD": 0,
+      "fiber": 3.1,
+      "sugar": 14
+    }
+  },
+  {
+    "id": "apple",
+    "name": "Apple",
+    "category": "Fruit",
+    "servingSize": 1,
+    "servingUnit": "medium",
+    "nutrition": {
+      "calories": 95,
+      "protein": 0.5,
+      "carbs": 25,
+      "fat": 0.3,
+      "calcium": 11,
+      "vitaminD": 0,
+      "fiber": 4.4,
+      "sugar": 19
+    }
+  },
+  {
+    "id": "strawberries",
+    "name": "Strawberries",
+    "category": "Fruit",
+    "servingSize": 1,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 49,
+      "protein": 1,
+      "carbs": 12,
+      "fat": 0.5,
+      "calcium": 24,
+      "vitaminD": 0,
+      "fiber": 3,
+      "sugar": 7
+    }
+  },
+  {
+    "id": "marinara",
+    "name": "Marinara Sauce",
+    "category": "Sauce",
+    "servingSize": 0.5,
+    "servingUnit": "cup",
+    "nutrition": {
+      "calories": 70,
+      "protein": 2,
+      "carbs": 12,
+      "fat": 2,
+      "calcium": 30,
+      "vitaminD": 0,
+      "fiber": 2,
+      "sugar": 8
+    }
+  }
+]
